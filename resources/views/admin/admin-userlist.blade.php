@@ -137,27 +137,18 @@
                                         <select name="role" id="role" class="form-control" required
                                             onchange="toggleForm()">
                                             <option value="Admin">Admin</option>
-                                            <option value="AdminMD">Admin MD</option>
-                                            <option value="Juri">Juri</option>
+                                            <option value="Operator">Operator</option>
                                         </select>
                                     </div>
                                     <div class="form-group" id="maindealerField" style="display:none">
-                                        <label>Main Dealer</label>
+                                        <label>NPSN (Sekolahan)</label>
                                         <select class="form-control" name="maindealer_id">
-                                            <option value="">Pilih Main Dealer</option>
+                                            <option value="">Pilih Operator Sekolah</option>
                                             {{-- @foreach ($mainDealers as $md)
                                                 <option value="{{ $md->id }}">{{ $md->kodemd }} -
                                                     {{ $md->nama_md }}</option>
                                             @endforeach --}}
                                         </select>
-                                    </div>
-                                    <div class="form-group" id="jabatanField" style="display:none">
-                                        <label>Jabatan</label>
-                                        <input type="text" class="form-control" name="jabatan">
-                                    </div>
-                                    <div class="form-group" id="divisionField" style="display:none">
-                                        <label for="division">Divisi</label>
-                                        <input type="text" class="form-control" name="division">
                                     </div>
                                     <div class="modal-footer">
                                         <button type="submit" class="btn btn-primary">Simpan</button>
@@ -280,29 +271,19 @@
                                         <select name="role" id="edit_role" class="form-control"
                                             onchange="toggleEditFields()">
                                             <option value="Admin">Admin</option>
-                                            <option value="AdminMD">Admin MD</option>
-                                            <option value="Juri">Juri</option>
-                                            <option value="Peserta">Peserta</option>
+                                            <option value="Operator">Operator</option>
                                         </select>
                                     </div>
                                     <div class="form-group" id="edit_maindealer_field" style="display:none;">
-                                        <label>Main Dealer</label>
+                                        <label>NPSN (Sekolahan)</label>
                                         <select class="form-control select2-maindealeredit" name="maindealer_id"
                                             id="edit_maindealer_id">
-                                            <option value="">Pilih Main Dealer</option>
+                                            <option value="">Pilih Operator Sekolah</option>
                                             {{-- @foreach ($mainDealers as $md)
                                                 <option value="{{ $md->id }}">{{ $md->kodemd }} -
                                                     {{ $md->nama_md }}</option>
                                             @endforeach --}}
                                         </select>
-                                    </div>
-                                    <div class="form-group" id="edit_jabatan_field" style="display:none;">
-                                        <label>Jabatan</label>
-                                        <input type="text" class="form-control" name="jabatan" id="edit_jabatan">
-                                    </div>
-                                    <div class="form-group" id="edit_division_field" style="display:none;">
-                                        <label>Divisi</label>
-                                        <input type="text" class="form-control" name="division" id="edit_division">
                                     </div>
                                 </div>
                                 <div class="modal-footer">
@@ -321,7 +302,7 @@
                         var role = $('#role').val();
                         $('#maindealerField, #jabatanField, #divisionField').hide();
 
-                        if (role === 'AdminMD') {
+                        if (role === 'Operator') {
                             $('#maindealerField').show();
                         } else if (role === 'Juri') {
                             $('#jabatanField, #divisionField').show();

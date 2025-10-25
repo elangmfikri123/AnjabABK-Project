@@ -30,10 +30,10 @@
         </a>
         <ul class="pcoded-submenu">
             <li class="{{ request()->is('listpeserta') ? 'active' : '' }}">
-                <a href="{{ url('/listpeserta') }}"><span class="pcoded-mtext">Data Eksisting</span></a>
+                <a href="{{ url('/data-eksisting/admin') }}"><span class="pcoded-mtext">Data Eksisting</span></a>
             </li>
             <li class="{{ request()->is('listpeserta') ? 'active' : '' }}">
-                <a href="{{ url('/listpeserta') }}"><span class="pcoded-mtext">Data Anjab ABK</span></a>
+                <a href="{{ url('/data-anjab/admin') }}"><span class="pcoded-mtext">Data Anjab ABK</span></a>
             </li>
         </ul>
     </li>
@@ -46,19 +46,22 @@
         </a>
         <ul class="pcoded-submenu">
             <li class="{{ request()->is('categorylist') ? 'active' : '' }}">
-                <a href="{{ url('/categorylist') }}"><span class="pcoded-mtext">Daftar Kecamatan</span></a>
+                <a href="{{ url('/akseskecamatan/admin') }}"><span class="pcoded-mtext">Daftar Kecamatan</span></a>
+            </li>
+            <li class="{{ request()->is('categorylist') ? 'active' : '' }}">
+                <a href="{{ url('/aksessekolah/admin') }}"><span class="pcoded-mtext">Daftar Sekolah</span></a>
             </li>
             <li class="{{ request()->is('maindealerlist') ? 'active' : '' }}">
-                <a href="{{ url('/maindealerlist') }}"><span class="pcoded-mtext">Daftar Jabatan</span></a>
+                <a href="{{ url('/aksesjabatan/admin') }}"><span class="pcoded-mtext">Daftar Jabatan</span></a>
             </li>
             <li class="{{ request()->is('maindealerlist') ? 'active' : '' }}">
-                <a href="{{ url('/maindealerlist') }}"><span class="pcoded-mtext">Daftar Golongan</span></a>
+                <a href="{{ url('/aksesgolongan/admin') }}"><span class="pcoded-mtext">Daftar Golongan</span></a>
             </li>
             <li class="{{ request()->is('maindealerlist') ? 'active' : '' }}">
-                <a href="{{ url('/maindealerlist') }}"><span class="pcoded-mtext">Jenis Guru</span></a>
+                <a href="{{ url('/aksesjenis-guru/admin') }}"><span class="pcoded-mtext">Jenis Guru</span></a>
             </li>
             <li class="{{ request()->is('maindealerlist') ? 'active' : '' }}">
-                <a href="{{ url('/maindealerlist') }}"><span class="pcoded-mtext">Mata Pelajaran</span></a>
+                <a href="{{ url('/aksesmapel/admin') }}"><span class="pcoded-mtext">Mata Pelajaran</span></a>
             </li>
         </ul>
     </li>

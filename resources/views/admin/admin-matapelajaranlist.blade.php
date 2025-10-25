@@ -1,5 +1,5 @@
 @extends('layout.template')
-@section('title', 'Manage Main Dealer - Admin')
+@section('title', 'Manage Kecamatan - Admin')
 @section('content')
     <div class="pcoded-content">
         <div class="pcoded-inner-content">
@@ -10,7 +10,7 @@
                             <div class="col-sm-12">
                                 <div class="card">
                                     <div class="card-header d-flex justify-content-between align-items-center">
-                                        <h5>Manage Main Dealer</h5>
+                                        <h5>Manage Mata Pelajaran</h5>
                                         <button class="btn btn-primary btn-sm" data-toggle="modal"
                                             data-target="#addUserModal">
                                             <i class="icofont icofont-plus"></i> Tambah
@@ -23,8 +23,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th class="text-center" style="width: 50px;">No</th>
-                                                        <th class="text-center">Kode Main Dealer</th>
-                                                        <th class="text-center">Nama Main Dealer</th>
+                                                        <th class="text-center">Nama Mata Pelajaran</th>
                                                         <th class="text-center">Action</th>
                                                     </tr>
                                                 </thead>
@@ -85,13 +84,8 @@
                                 <div class="modal-body">
                                     <input type="hidden" id="edit_id" name="id">
                                     <div class="form-group">
-                                        <label for="edit_kodemd">Kode Main Dealer</label>
+                                        <label for="edit_kodemd">Kecamatan</label>
                                         <input type="text" class="form-control" id="edit_kodemd" name="kodemd" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="edit_nama_md">Nama Main Dealer</label>
-                                        <input type="text" class="form-control" id="edit_nama_md" name="nama_md"
-                                            required>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
@@ -115,7 +109,7 @@
             $('#myTable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ url('/get-maindealer/data') }}',
+                ajax: '{{ url('/get-kecamatan/data') }}',
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
@@ -124,12 +118,8 @@
                         className: 'text-center'
                     },
                     {
-                        data: 'kodemd',
-                        name: 'kodemd'
-                    },
-                    {
-                        data: 'nama_md',
-                        name: 'nama_md'
+                        data: 'kecamatan',
+                        name: 'kecamatan'
                     },
                     {
                         data: 'action',
