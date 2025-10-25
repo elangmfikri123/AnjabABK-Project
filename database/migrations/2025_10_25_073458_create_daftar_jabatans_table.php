@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('daftar_jabatans', function (Blueprint $table) {
             $table->id();
             $table->string('vnama_jabatan');
+            $table->string('vkelas_jabatan');
             $table->timestamps();
         });
     }

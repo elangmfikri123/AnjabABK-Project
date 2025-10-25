@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Mapel extends Model
 {
     use HasFactory;
+
+    protected $table = 'mapels';
+    protected $guarded = ['id'];
+
+    public function dataEksistings()
+    {
+        return $this->hasMany(DataEksisting::class, 'mapels_id');
+    }
 }
