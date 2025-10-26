@@ -61,6 +61,6 @@ class User extends Authenticatable
     }
     public function sekolah()
     {
-        return $this->belongsTo(\App\Models\DaftarSekolah::class, 'daftar_sekolahs_id');
+        return $this->belongsTo(DaftarSekolah::class, 'daftar_sekolahs_id');
     }
 }

@@ -1,5 +1,5 @@
 @extends('layout.template')
-@section('title', 'Manage Kecamatan - Admin')
+@section('title', 'Manage Golongan - Admin')
 @section('content')
     <div class="pcoded-content">
         <div class="pcoded-inner-content">
@@ -42,21 +42,17 @@
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="addUserModalLabel">Tambah Main Dealer</h5>
+                                <h5 class="modal-title" id="addUserModalLabel">Tambah Golongan</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form id="addMainDealerForm">
+                                <form id="addGolonganForm">
                                     @csrf
                                     <div class="form-group">
-                                        <label for="kodemd">Kode Main Dealer</label>
-                                        <input type="text" class="form-control" id="kodemd" name="kodemd" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="nama_md">Nama Main Dealer</label>
-                                        <input type="text" class="form-control" id="nama_md" name="nama_md" required>
+                                        <label for="vgolongan">Nama Golongan</label>
+                                        <input type="text" class="form-control" id="vgolongan" name="vgolongan" required>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="submit" class="btn btn-primary">Submit</button>
@@ -68,15 +64,15 @@
                 </div>
 
                 <!-- Modal Edit Main Dealer -->
-                <div class="modal fade" id="editMainDealerModal" tabindex="-1" role="dialog"
-                    aria-labelledby="editMainDealerModalLabel" aria-hidden="true">
+                <div class="modal fade" id="editGolonganModal" tabindex="-1" role="dialog"
+                    aria-labelledby="editGolonganModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
-                        <form id="editMainDealerForm">
+                        <form id="editGolonganForm">
                             @csrf
                             @method('PUT')
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Edit Main Dealer</h5>
+                                    <h5 class="modal-title">Edit Golongan</h5>
                                     <button type="button" class="close" data-dismiss="modal">
                                         <span>&times;</span>
                                     </button>
@@ -84,8 +80,8 @@
                                 <div class="modal-body">
                                     <input type="hidden" id="edit_id" name="id">
                                     <div class="form-group">
-                                        <label for="edit_kodemd">Kecamatan</label>
-                                        <input type="text" class="form-control" id="edit_kodemd" name="kodemd" required>
+                                        <label for="edit_golongan">Nama Golongan</label>
+                                        <input type="text" class="form-control" id="edit_golongan" name="vgolongan" required>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
@@ -109,7 +105,7 @@
             $('#myTable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ url('/get-kecamatan/data') }}',
+                ajax: '{{ url('/get-golongan/data') }}',
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
@@ -118,8 +114,8 @@
                         className: 'text-center'
                     },
                     {
-                        data: 'kecamatan',
-                        name: 'kecamatan'
+                        data: 'vgolongan',
+                        name: 'vgolongan'
                     },
                     {
                         data: 'action',
@@ -130,11 +126,11 @@
                     }
                 ]
             });
-            $('#addMainDealerForm').on('submit', function(e) {
+            $('#addGolonganForm').on('submit', function(e) {
                 e.preventDefault();
                 var formData = $(this).serialize();
                 $.ajax({
-                    url: "{{ url('/maindealer/store') }}",
+                    url: "{{ url('/golongan/store') }}",
                     method: 'POST',
                     data: formData,
                     success: function(response) {
@@ -142,10 +138,10 @@
                         Swal.fire({
                             icon: 'success',
                             title: 'Berhasil!',
-                            text: 'Main Dealer berhasil ditambahkan!',
+                            text: 'Golongan berhasil ditambahkan!',
                             confirmButtonText: 'OK'
                         }).then((result) => {
-                            $('#addMainDealerForm')[0].reset();
+                            $('#addGolonganForm')[0].reset();
                             table.ajax.reload();
                         });
                     },
@@ -164,25 +160,24 @@
 
             $(document).on('click', '.edit-button', function() {
                 let id = $(this).data('id');
-                $.get('/maindealer/edit/' + id, function(data) {
+                $.get('/golongan/edit/' + id, function(data) {
                     $('#edit_id').val(data.id);
-                    $('#edit_kodemd').val(data.kodemd);
-                    $('#edit_nama_md').val(data.nama_md);
-                    $('#editMainDealerModal').modal('show');
+                    $('#edit_golongan').val(data.vgolongan);
+                    $('#editGolonganModal').modal('show');
                 });
             });
 
-            $('#editMainDealerForm').on('submit', function(e) {
+            $('#editGolonganForm').on('submit', function(e) {
                 e.preventDefault();
                 let id = $('#edit_id').val();
                 let formData = $(this).serialize();
 
                 $.ajax({
-                    url: '/maindealer/update/' + id,
-                    method: 'POST',
+                    url: '/golongan/update/' + id,
+                    method: 'PUT',
                     data: formData,
                     success: function(res) {
-                        $('#editMainDealerModal').modal('hide');
+                        $('#editGolonganModal').modal('hide');
                         Swal.fire('Berhasil!', res.success, 'success');
                         table.ajax.reload();
                     },

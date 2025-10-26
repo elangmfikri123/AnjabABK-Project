@@ -38,4 +38,43 @@ class JenisGuruController extends Controller
 
         return $result;
     }
+    public function storeJenisGuru(Request $request)
+    {
+        $request->validate([
+            'vnama_jenisguru' => 'required|string|max:255',
+        ]);
+
+        JenisGuru::create([
+            'vnama_jenisguru' => $request->vnama_jenisguru,
+        ]);
+
+        return response()->json(['success' => 'Golongan berhasil ditambahkan!']);
+    }
+
+    public function editJenisGuru($id)
+    {
+        $data = JenisGuru::findOrFail($id);
+        return response()->json($data);
+    }
+
+    public function updateJenisGuru(Request $request, $id)
+    {
+        $request->validate([
+            'vnama_jenisguru' => 'required|string|max:255',
+        ]);
+
+        $data = JenisGuru::findOrFail($id);
+        $data->update($request->only([
+            'vnama_jenisguru',
+        ]));
+
+        return response()->json(['success' => 'Jabatan berhasil diperbarui!']);
+    }
+
+    public function deleteJenisGuru($id)
+    {
+        $data = JenisGuru::findOrFail($id);
+        $data->delete();
+        return response()->json(['success' => 'Jabatan berhasil dihapus!']);
+    }
 }

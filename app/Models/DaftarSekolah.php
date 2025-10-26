@@ -26,4 +26,8 @@ class DaftarSekolah extends Model
     {
         return $this->hasMany(DataEksisting::class, 'daftar_sekolahs_id');
     }
+    public function users()
+    {
+        return $this->hasMany(User::class, 'daftar_sekolahs_id');
+    }
 }

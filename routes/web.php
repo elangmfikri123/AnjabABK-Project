@@ -12,6 +12,7 @@ use App\Http\Controllers\JenisGuruController;
 use App\Http\Controllers\KecamatanController;
 use App\Http\Controllers\MapelController;
 use App\Models\DaftarJabatan;
+use App\Models\DaftarSekolah;
 use App\Models\Kecamatan;
 
 /*
@@ -56,23 +57,42 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
     //SEKOLAH
     Route::get('/aksessekolah/admin', [DaftarSekolahController::class, 'index'])->name('data.sekolah');
     Route::get('/get-sekolah/data', [DaftarSekolahController::class, 'getdatasekolah']);
+    Route::post('/sekolah/store', [DaftarSekolahController::class, 'storesekolah']);
+    Route::get('/sekolah/edit/{id}', [DaftarSekolahController::class, 'editSekolah'])->name('sekolah.edit');
+    Route::put('/sekolah/update/{id}', [DaftarSekolahController::class, 'updateSekolah'])->name('sekolah.update');
+    Route::delete('/sekolah/delete/{id}', [DaftarSekolahController::class, 'deleteSekolah'])->name('sekolah.delete');
 
     //JABATAN
     Route::get('/aksesjabatan/admin', [DataJabatanController::class, 'index'])->name('data.jabatan');
     Route::get('/get-jabatan/data', [DataJabatanController::class, 'getdatajabatan']);
-
+    Route::post('/jabatan/store', [DataJabatanController::class, 'storeJabatan']);
+    Route::get('/jabatan/edit/{id}', [DataJabatanController::class, 'editJabatan'])->name('jabatan.edit');
+    Route::put('/jabatan/update/{id}', [DataJabatanController::class, 'updateJabatan'])->name('jabatan.update');
+    Route::delete('/jabatan/delete/{id}', [DataJabatanController::class, 'deleteJabatan'])->name('jabatan.delete');
 
     //GOLONGAN
     Route::get('/aksesgolongan/admin', [DaftarGolonganController::class, 'index'])->name('data.golongan');
     Route::get('/get-golongan/data', [DaftarGolonganController::class, 'getdatagolongan']);
+    Route::post('/golongan/store', [DaftarGolonganController::class, 'storeGolongan']);
+    Route::get('/golongan/edit/{id}', [DaftarGolonganController::class, 'editGolongan'])->name('golongan.edit');
+    Route::put('/golongan/update/{id}', [DaftarGolonganController::class, 'updateGolongan'])->name('golongan.update');
+    Route::delete('/golongan/delete/{id}', [DaftarGolonganController::class, 'deleteGolongan'])->name('golongan.delete');
 
     //JENIS GURU
     Route::get('/aksesjenis-guru/admin', [JenisGuruController::class, 'index'])->name('data.jenisguru');
     Route::get('/get-jenisguru/data', [JenisGuruController::class, 'getdatajenisguru']);
+    Route::post('/jenisguru/store', [JenisGuruController::class, 'storeJenisGuru']);
+    Route::get('/jenisguru/edit/{id}', [JenisGuruController::class, 'editJenisGuru'])->name('jenisguru.edit');
+    Route::put('/jenisguru/update/{id}', [JenisGuruController::class, 'updateJenisGuru'])->name('jenisguru.update');
+    Route::delete('/jenisguru/delete/{id}', [JenisGuruController::class, 'deleteJenisGuru'])->name('jenisguru.delete');
 
     //MATA PELAJARAN
     Route::get('/aksesmapel/admin', [MapelController::class, 'index'])->name('data.mapel');
     Route::get('/get-mapel/data', [MapelController::class, 'getdatamapel']);
+    Route::post('/mapel/store', [MapelController::class, 'storeMapel']);
+    Route::get('/mapel/edit/{id}', [MapelController::class, 'editMapel'])->name('mapel.edit');
+    Route::put('/mapel/update/{id}', [MapelController::class, 'updateMapel'])->name('mapel.update');
+    Route::delete('/mapel/delete/{id}', [MapelController::class, 'deleteMapel'])->name('mapel.delete');
 });
 
 Route::middleware(['auth', 'role:Operator'])->group(function () {

@@ -38,4 +38,43 @@ class MapelController extends Controller
 
         return $result;
     }
+    public function storeMapel(Request $request)
+    {
+        $request->validate([
+            'vnama_mapel' => 'required|string|max:255',
+        ]);
+
+        Mapel::create([
+            'vnama_mapel' => $request->vnama_mapel,
+        ]);
+
+        return response()->json(['success' => 'Mata Pelajaran berhasil ditambahkan!']);
+    }
+
+    public function editMapel($id)
+    {
+        $data = Mapel::findOrFail($id);
+        return response()->json($data);
+    }
+
+    public function updateMapel(Request $request, $id)
+    {
+        $request->validate([
+            'vnama_mapel' => 'required|string|max:255',
+        ]);
+
+        $data = Mapel::findOrFail($id);
+        $data->update($request->only([
+            'vnama_mapel',
+        ]));
+
+        return response()->json(['success' => 'Mata Pelajaran berhasil diperbarui!']);
+    }
+
+    public function deleteMapel($id)
+    {
+        $data = Mapel::findOrFail($id);
+        $data->delete();
+        return response()->json(['success' => 'Mata Pelajaran berhasil dihapus!']);
+    }
 }

@@ -18,7 +18,8 @@ class DataJabatanController extends Controller
             $search = $request->search['value'];
             $data->where(function ($query) use ($search) {
                 $query->where('id', 'like', '%' . $search . '%')
-                    ->orWhere('vnama_jabatan', 'like', '%' . $search . '%');
+                    ->orWhere('vnama_jabatan', 'like', '%' . $search . '%')
+                    ->orWhere('vkelas_jabatan', 'like', '%' . $search . '%');
             });
         }
 
@@ -37,5 +38,48 @@ class DataJabatanController extends Controller
             ->toJson();
 
         return $result;
+    }
+    public function storeJabatan(Request $request)
+    {
+        $request->validate([
+            'vnama_jabatan' => 'required|string|max:255',
+            'vkelas_jabatan' => 'required|string|max:255',
+        ]);
+
+        DaftarJabatan::create([
+            'vnama_jabatan' => $request->vnama_jabatan,
+            'vkelas_jabatan' => $request->vkelas_jabatan,
+        ]);
+
+        return response()->json(['success' => 'Sekolah berhasil ditambahkan!']);
+    }
+
+    public function editJabatan($id)
+    {
+        $data = DaftarJabatan::findOrFail($id);
+        return response()->json($data);
+    }
+
+    public function updateJabatan(Request $request, $id)
+    {
+        $request->validate([
+            'vnama_jabatan' => 'required|string|max:255',
+            'vkelas_jabatan' => 'required|string|max:255',
+        ]);
+
+        $data = DaftarJabatan::findOrFail($id);
+        $data->update($request->only([
+            'vnama_jabatan', 
+            'vkelas_jabatan',
+        ]));
+
+        return response()->json(['success' => 'Jabatan berhasil diperbarui!']);
+    }
+
+    public function deleteJabatan($id)
+    {
+        $data = DaftarJabatan::findOrFail($id);
+        $data->delete();
+        return response()->json(['success' => 'Jabatan berhasil dihapus!']);
     }
 }

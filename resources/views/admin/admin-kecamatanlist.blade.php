@@ -42,7 +42,7 @@
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="addUserModalLabel">Tambah Main Dealer</h5>
+                                <h5 class="modal-title" id="addUserModalLabel">Tambah Kecamatan</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -64,15 +64,15 @@
                 </div>
 
                 <!-- Modal Edit Main Dealer -->
-                <div class="modal fade" id="editMainDealerModal" tabindex="-1" role="dialog"
-                    aria-labelledby="editMainDealerModalLabel" aria-hidden="true">
+                <div class="modal fade" id="editKecamatan" tabindex="-1" role="dialog"
+                    aria-labelledby="editKecamatanLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
-                        <form id="editMainDealerForm">
+                        <form id="editKecamatanForm">
                             @csrf
                             @method('PUT')
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Edit Main Dealer</h5>
+                                    <h5 class="modal-title">Edit Kecamatan</h5>
                                     <button type="button" class="close" data-dismiss="modal">
                                         <span>&times;</span>
                                     </button>
@@ -80,8 +80,8 @@
                                 <div class="modal-body">
                                     <input type="hidden" id="edit_id" name="id">
                                     <div class="form-group">
-                                        <label for="edit_kodemd">Kecamatan</label>
-                                        <input type="text" class="form-control" id="edit_kodemd" name="kodemd" required>
+                                        <label for="edit_kecamatan">Kecamatan</label>
+                                        <input type="text" class="form-control" id="edit_kecamatan" name="vnama_kecamatan" required>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
@@ -138,7 +138,7 @@
                         Swal.fire({
                             icon: 'success',
                             title: 'Berhasil!',
-                            text: 'Main Dealer berhasil ditambahkan!',
+                            text: 'Kecamatan berhasil ditambahkan!',
                             confirmButtonText: 'OK'
                         }).then((result) => {
                             $('#addKecamatan')[0].reset();
@@ -160,25 +160,24 @@
 
             $(document).on('click', '.edit-button', function() {
                 let id = $(this).data('id');
-                $.get('/maindealer/edit/' + id, function(data) {
+                $.get('/kecamatan/edit/' + id, function(data) {
                     $('#edit_id').val(data.id);
-                    $('#edit_kodemd').val(data.kodemd);
-                    $('#edit_nama_md').val(data.nama_md);
-                    $('#editMainDealerModal').modal('show');
+                    $('#edit_kecamatan').val(data.vnama_kecamatan);
+                    $('#editKecamatan').modal('show');
                 });
             });
 
-            $('#editMainDealerForm').on('submit', function(e) {
+            $('#editKecamatanForm').on('submit', function(e) {
                 e.preventDefault();
                 let id = $('#edit_id').val();
                 let formData = $(this).serialize();
 
                 $.ajax({
-                    url: '/maindealer/update/' + id,
+                    url: '/kecamatan/update/' + id,
                     method: 'POST',
                     data: formData,
                     success: function(res) {
-                        $('#editMainDealerModal').modal('hide');
+                        $('#editKecamatan').modal('hide');
                         Swal.fire('Berhasil!', res.success, 'success');
                         table.ajax.reload();
                     },

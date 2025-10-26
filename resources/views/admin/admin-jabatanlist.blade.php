@@ -1,5 +1,5 @@
 @extends('layout.template')
-@section('title', 'Manage Kecamatan - Admin')
+@section('title', 'Manage Jabatan - Admin')
 @section('content')
     <div class="pcoded-content">
         <div class="pcoded-inner-content">
@@ -24,6 +24,7 @@
                                                     <tr>
                                                         <th class="text-center" style="width: 50px;">No</th>
                                                         <th class="text-center">Jabatan</th>
+                                                        <th class="text-center">Kelas Jabatan</th>
                                                         <th class="text-center">Action</th>
                                                     </tr>
                                                 </thead>
@@ -42,21 +43,21 @@
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="addUserModalLabel">Tambah Main Dealer</h5>
+                                <h5 class="modal-title" id="addUserModalLabel">Tambah Jabatan</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form id="addMainDealerForm">
+                                <form id="addJabatanForm">
                                     @csrf
                                     <div class="form-group">
-                                        <label for="kodemd">Kode Main Dealer</label>
-                                        <input type="text" class="form-control" id="kodemd" name="kodemd" required>
+                                        <label for="vnama_jabatan">Nama Jabatan</label>
+                                        <input type="text" class="form-control" id="vnama_jabatan" name="vnama_jabatan" required>
                                     </div>
                                     <div class="form-group">
-                                        <label for="nama_md">Nama Main Dealer</label>
-                                        <input type="text" class="form-control" id="nama_md" name="nama_md" required>
+                                        <label for="vkelas_jabatan">Kelas Jabatan</label>
+                                        <input type="text" class="form-control" id="vkelas_jabatan" name="vkelas_jabatan" required>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="submit" class="btn btn-primary">Submit</button>
@@ -68,15 +69,15 @@
                 </div>
 
                 <!-- Modal Edit Main Dealer -->
-                <div class="modal fade" id="editMainDealerModal" tabindex="-1" role="dialog"
-                    aria-labelledby="editMainDealerModalLabel" aria-hidden="true">
+                <div class="modal fade" id="editJabatanModal" tabindex="-1" role="dialog"
+                    aria-labelledby="editJabatanModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
-                        <form id="editMainDealerForm">
+                        <form id="editJabatanForm">
                             @csrf
                             @method('PUT')
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Edit Main Dealer</h5>
+                                    <h5 class="modal-title">Edit Jabatan</h5>
                                     <button type="button" class="close" data-dismiss="modal">
                                         <span>&times;</span>
                                     </button>
@@ -84,8 +85,12 @@
                                 <div class="modal-body">
                                     <input type="hidden" id="edit_id" name="id">
                                     <div class="form-group">
-                                        <label for="edit_kodemd">Kecamatan</label>
-                                        <input type="text" class="form-control" id="edit_kodemd" name="kodemd" required>
+                                        <label for="edit_vnama_jabatan">Nama Jabatan</label>
+                                        <input type="text" class="form-control" id="edit_vnama_jabatan" name="vnama_jabatan" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="edit_vkelas_jabatan">Kelas Jabatan</label>
+                                        <input type="text" class="form-control" id="edit_vkelas_jabatan" name="vkelas_jabatan" required>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
@@ -109,7 +114,7 @@
             $('#myTable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ url('/get-kecamatan/data') }}',
+                ajax: '{{ url('/get-jabatan/data') }}',
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
@@ -118,8 +123,12 @@
                         className: 'text-center'
                     },
                     {
-                        data: 'kecamatan',
-                        name: 'kecamatan'
+                        data: 'vnama_jabatan',
+                        name: 'vnama_jabatan'
+                    },
+                    {
+                        data: 'vkelas_jabatan',
+                        name: 'vkelas_jabatan'
                     },
                     {
                         data: 'action',
@@ -130,11 +139,11 @@
                     }
                 ]
             });
-            $('#addMainDealerForm').on('submit', function(e) {
+            $('#addJabatanForm').on('submit', function(e) {
                 e.preventDefault();
                 var formData = $(this).serialize();
                 $.ajax({
-                    url: "{{ url('/maindealer/store') }}",
+                    url: "{{ url('/jabatan/store') }}",
                     method: 'POST',
                     data: formData,
                     success: function(response) {
@@ -142,10 +151,10 @@
                         Swal.fire({
                             icon: 'success',
                             title: 'Berhasil!',
-                            text: 'Main Dealer berhasil ditambahkan!',
+                            text: 'Jabatan berhasil ditambahkan!',
                             confirmButtonText: 'OK'
                         }).then((result) => {
-                            $('#addMainDealerForm')[0].reset();
+                            $('#addJabatanForm')[0].reset();
                             table.ajax.reload();
                         });
                     },
@@ -164,25 +173,25 @@
 
             $(document).on('click', '.edit-button', function() {
                 let id = $(this).data('id');
-                $.get('/maindealer/edit/' + id, function(data) {
+                $.get('/jabatan/edit/' + id, function(data) {
                     $('#edit_id').val(data.id);
-                    $('#edit_kodemd').val(data.kodemd);
-                    $('#edit_nama_md').val(data.nama_md);
-                    $('#editMainDealerModal').modal('show');
+                    $('#edit_vnama_jabatan').val(data.vnama_jabatan);
+                    $('#edit_vkelas_jabatan').val(data.vkelas_jabatan);
+                    $('#editJabatanModal').modal('show');
                 });
             });
 
-            $('#editMainDealerForm').on('submit', function(e) {
+            $('#editJabatanForm').on('submit', function(e) {
                 e.preventDefault();
                 let id = $('#edit_id').val();
                 let formData = $(this).serialize();
 
                 $.ajax({
-                    url: '/maindealer/update/' + id,
-                    method: 'POST',
+                    url: '/jabatan/update/' + id,
+                    method: 'PUT',
                     data: formData,
                     success: function(res) {
-                        $('#editMainDealerModal').modal('hide');
+                        $('#editJabatanModal').modal('hide');
                         Swal.fire('Berhasil!', res.success, 'success');
                         table.ajax.reload();
                     },

@@ -25,6 +25,8 @@
                                                         <th class="text-center" style="width: 50px;">No</th>
                                                         <th class="text-center">NPSN</th>
                                                         <th class="text-center">Nama Sekolah</th>
+                                                        <th class="text-center">Kecamatan</th>
+                                                        <th class="text-center">Action</th>
                                                     </tr>
                                                 </thead>
                                             </table>
@@ -42,22 +44,34 @@
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="addUserModalLabel">Tambah Main Dealer</h5>
+                                <h5 class="modal-title" id="addUserModalLabel">Tambah Sekolah</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form id="addMainDealerForm">
+                                <form id="addSekolahForm">
                                     @csrf
                                     <div class="form-group">
-                                        <label for="kodemd">Kode Main Dealer</label>
-                                        <input type="text" class="form-control" id="kodemd" name="kodemd" required>
+                                        <label for="vnpsn_sekolah">NPSN Sekolahan</label>
+                                        <input type="text" class="form-control" id="vnpsn_sekolah" name="vnpsn_sekolah"
+                                            required>
                                     </div>
                                     <div class="form-group">
-                                        <label for="nama_md">Nama Main Dealer</label>
-                                        <input type="text" class="form-control" id="nama_md" name="nama_md" required>
+                                        <label for="vnama_sekolah">Nama Sekolahan</label>
+                                        <input type="text" class="form-control" id="vnama_sekolah" name="vnama_sekolah"
+                                            required>
                                     </div>
+                                    <div class="form-group">
+                                        <label for="kecamatans_id">Asal Kecamatan</label>
+                                        <select class="form-control" id="kecamatans_id" name="kecamatans_id" required>
+                                            <option value="">-- Pilih Kecamatan --</option>
+                                            @foreach ($kecamatans as $k)
+                                                <option value="{{ $k->id }}">{{ $k->vnama_kecamatan }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
                                     <div class="modal-footer">
                                         <button type="submit" class="btn btn-primary">Submit</button>
                                     </div>
@@ -67,34 +81,55 @@
                     </div>
                 </div>
 
-                <!-- Modal Edit Main Dealer -->
-                <div class="modal fade" id="editMainDealerModal" tabindex="-1" role="dialog"
-                    aria-labelledby="editMainDealerModalLabel" aria-hidden="true">
+                <!-- Modal Edit Sekolah -->
+                <div class="modal fade" id="editSekolahModal" tabindex="-1" role="dialog"
+                    aria-labelledby="editSekolahModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
-                        <form id="editMainDealerForm">
+                        <form id="editSekolahForm">
                             @csrf
                             @method('PUT')
+                            <input type="hidden" id="edit_id" name="edit_id">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Edit Main Dealer</h5>
+                                    <h5 class="modal-title" id="editSekolahModalLabel">Edit Sekolah</h5>
                                     <button type="button" class="close" data-dismiss="modal">
                                         <span>&times;</span>
                                     </button>
                                 </div>
+
+                                <!-- Modal body (dibungkus rapi di sini) -->
                                 <div class="modal-body">
-                                    <input type="hidden" id="edit_id" name="id">
                                     <div class="form-group">
-                                        <label for="edit_kodemd">Kecamatan</label>
-                                        <input type="text" class="form-control" id="edit_kodemd" name="kodemd" required>
+                                        <label for="vnpsn_sekolah">NPSN Sekolahan</label>
+                                        <input type="text" class="form-control" id="vnpsn_sekolah" name="vnpsn_sekolah"
+                                            required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="vnama_sekolah">Nama Sekolahan</label>
+                                        <input type="text" class="form-control" id="vnama_sekolah" name="vnama_sekolah"
+                                            required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="kecamatans_id">Asal Kecamatan</label>
+                                        <select class="form-control" id="kecamatans_id" name="kecamatans_id" required>
+                                            <option value="">-- Pilih Kecamatan --</option>
+                                            @foreach ($kecamatans as $k)
+                                                <option value="{{ $k->id }}">{{ $k->vnama_kecamatan }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
+
+                                <!-- Modal footer -->
                                 <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                                     <button type="submit" class="btn btn-primary">Update</button>
                                 </div>
                             </div>
                         </form>
                     </div>
                 </div>
+
 
 
             </div>
@@ -109,13 +144,21 @@
             $('#myTable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ url('/get-kecamatan/data') }}',
+                ajax: '{{ url('/get-sekolah/data') }}',
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
                         orderable: false,
                         searchable: false,
                         className: 'text-center'
+                    },
+                    {
+                        data: 'vnpsn_sekolah',
+                        name: 'vnpsn_sekolah'
+                    },
+                    {
+                        data: 'vnama_sekolah',
+                        name: 'vnama_sekolah'
                     },
                     {
                         data: 'kecamatan',
@@ -130,11 +173,11 @@
                     }
                 ]
             });
-            $('#addMainDealerForm').on('submit', function(e) {
+            $('#addSekolahForm').on('submit', function(e) {
                 e.preventDefault();
                 var formData = $(this).serialize();
                 $.ajax({
-                    url: "{{ url('/maindealer/store') }}",
+                    url: "{{ url('/sekolah/store') }}",
                     method: 'POST',
                     data: formData,
                     success: function(response) {
@@ -142,10 +185,10 @@
                         Swal.fire({
                             icon: 'success',
                             title: 'Berhasil!',
-                            text: 'Main Dealer berhasil ditambahkan!',
+                            text: 'Sekolah berhasil ditambahkan!',
                             confirmButtonText: 'OK'
                         }).then((result) => {
-                            $('#addMainDealerForm')[0].reset();
+                            $('#addSekolahForm')[0].reset();
                             table.ajax.reload();
                         });
                     },
@@ -164,25 +207,32 @@
 
             $(document).on('click', '.edit-button', function() {
                 let id = $(this).data('id');
-                $.get('/maindealer/edit/' + id, function(data) {
+
+                $.get('/sekolah/edit/' + id, function(response) {
+                    let data = response.data;
+
+                    // Isi data ke form modal
                     $('#edit_id').val(data.id);
-                    $('#edit_kodemd').val(data.kodemd);
-                    $('#edit_nama_md').val(data.nama_md);
-                    $('#editMainDealerModal').modal('show');
+                    $('#editSekolahModal #vnpsn_sekolah').val(data.vnpsn_sekolah);
+                    $('#editSekolahModal #vnama_sekolah').val(data.vnama_sekolah);
+                    $('#editSekolahModal #kecamatans_id').val(data.kecamatans_id);
+
+                    // Tampilkan modal edit
+                    $('#editSekolahModal').modal('show');
                 });
             });
 
-            $('#editMainDealerForm').on('submit', function(e) {
+            $('#editSekolahForm').on('submit', function(e) {
                 e.preventDefault();
                 let id = $('#edit_id').val();
                 let formData = $(this).serialize();
 
                 $.ajax({
-                    url: '/maindealer/update/' + id,
+                    url: '/sekolah/update/' + id,
                     method: 'POST',
                     data: formData,
                     success: function(res) {
-                        $('#editMainDealerModal').modal('hide');
+                        $('#editSekolahModal').modal('hide');
                         Swal.fire('Berhasil!', res.success, 'success');
                         table.ajax.reload();
                     },

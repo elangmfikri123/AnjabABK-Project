@@ -40,14 +40,40 @@
                                                         processing: true,
                                                         serverSide: true,
                                                         ajax: '/get-user/data',
-                                                        columns: [
-                                                            { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
-                                                            { data: 'nama', name: 'nama' },
-                                                            { data: 'username', name: 'username' },
-                                                            { data: 'email', name: 'email' },
-                                                            { data: 'role', name: 'role' },
-                                                            { data: 'status', name: 'status', className: 'text-center' },
-                                                            { data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center' },
+                                                        columns: [{
+                                                                data: 'DT_RowIndex',
+                                                                name: 'DT_RowIndex',
+                                                                orderable: false,
+                                                                searchable: false
+                                                            },
+                                                            {
+                                                                data: 'nama',
+                                                                name: 'nama'
+                                                            },
+                                                            {
+                                                                data: 'username',
+                                                                name: 'username'
+                                                            },
+                                                            {
+                                                                data: 'email',
+                                                                name: 'email'
+                                                            },
+                                                            {
+                                                                data: 'role',
+                                                                name: 'role'
+                                                            },
+                                                            {
+                                                                data: 'status',
+                                                                name: 'status',
+                                                                className: 'text-center'
+                                                            },
+                                                            {
+                                                                data: 'action',
+                                                                name: 'action',
+                                                                orderable: false,
+                                                                searchable: false,
+                                                                className: 'text-center'
+                                                            },
                                                         ]
                                                     });
                                                 });
@@ -114,6 +140,9 @@
                                 </button>
                             </div>
                             <div class="modal-body">
+                                <!-- Error container -->
+                                <div id="addUserError" class="alert alert-danger" style="display: none;"></div>
+
                                 <form id="createUserForm" action="{{ route('user.store') }}" method="POST">
                                     @csrf
                                     <div class="form-group">
@@ -140,14 +169,14 @@
                                             <option value="Operator">Operator</option>
                                         </select>
                                     </div>
-                                    <div class="form-group" id="maindealerField" style="display:none">
+                                    <div class="form-group" id="sekolahField" style="display:none">
                                         <label>NPSN (Sekolahan)</label>
-                                        <select class="form-control" name="maindealer_id">
-                                            <option value="">Pilih Operator Sekolah</option>
-                                            {{-- @foreach ($mainDealers as $md)
-                                                <option value="{{ $md->id }}">{{ $md->kodemd }} -
-                                                    {{ $md->nama_md }}</option>
-                                            @endforeach --}}
+                                        <select class="form-control select2-sekolah" name="daftar_sekolahs_id">
+                                            <option value="">Pilih Sekolah</option>
+                                            @foreach ($sekolahs as $s)
+                                                <option value="{{ $s->id }}">{{ $s->vnpsn_sekolah }} -
+                                                    {{ $s->vnama_sekolah }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                     <div class="modal-footer">
@@ -155,6 +184,7 @@
                                     </div>
                                 </form>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -190,20 +220,8 @@
                                                 <td id="detail_role"></td>
                                             </tr>
                                             <tr>
-                                                <th>Main Dealer</th>
-                                                <td id="detail_maindealer"></td>
-                                            </tr>
-                                            <tr>
-                                                <th>Kode MD</th>
-                                                <td id="detail_kodemd"></td>
-                                            </tr>
-                                            <tr>
-                                                <th>Jabatan</th>
-                                                <td id="detail_jabatan"></td>
-                                            </tr>
-                                            <tr>
-                                                <th>Divisi</th>
-                                                <td id="detail_division"></td>
+                                                <th>Operator Sekolah</th>
+                                                <td id="detail_sekolah"></td>
                                             </tr>
                                             <tr>
                                                 <th>Status</th>
@@ -238,59 +256,66 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <input type="hidden" name="user_id" id="edit_user_id">
-                                    <div class="form-group">
-                                        <label>Nama</label>
-                                        <input type="text" name="nama" id="edit_nama" class="form-control"
-                                            required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Email</label>
-                                        <input type="email" name="email" id="edit_email" class="form-control"
-                                            required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Username</label>
-                                        <input type="text" name="username" id="edit_username" class="form-control"
-                                            readonly>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Password</label>
-                                        <div class="input-group">
-                                            <input type="password" id="password" name="password" class="form-control"
-                                                placeholder="Kosongkan jika tidak ingin mengubah">
-                                            <span class="input-group-addon" onclick="togglePassword()"
-                                                style="cursor: pointer;">
-                                                <i class="ion-eye-disabled" id="eye-icon"></i>
-                                            </span>
+                                    <div id="editUserError" class="alert alert-danger" style="display: none;"></div>
+
+                                    <form id="editUserForm" method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                        <input type="hidden" name="user_id" id="edit_user_id">
+                                        <div class="form-group">
+                                            <label>Nama</label>
+                                            <input type="text" name="nama" id="edit_nama" class="form-control"
+                                                required>
                                         </div>
-                                        <small class="text-muted">Biarkan kosong jika tidak ingin mengubah password</small>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Role</label>
-                                        <select name="role" id="edit_role" class="form-control"
-                                            onchange="toggleEditFields()">
-                                            <option value="Admin">Admin</option>
-                                            <option value="Operator">Operator</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group" id="edit_maindealer_field" style="display:none;">
-                                        <label>NPSN (Sekolahan)</label>
-                                        <select class="form-control select2-maindealeredit" name="maindealer_id"
-                                            id="edit_maindealer_id">
-                                            <option value="">Pilih Operator Sekolah</option>
-                                            {{-- @foreach ($mainDealers as $md)
-                                                <option value="{{ $md->id }}">{{ $md->kodemd }} -
-                                                    {{ $md->nama_md }}</option>
-                                            @endforeach --}}
-                                        </select>
-                                    </div>
+                                        <div class="form-group">
+                                            <label>Email</label>
+                                            <input type="email" name="email" id="edit_email" class="form-control"
+                                                required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Username</label>
+                                            <input type="text" name="username" id="edit_username"
+                                                class="form-control" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Password</label>
+                                            <div class="input-group">
+                                                <input type="password" id="password" name="password"
+                                                    class="form-control"
+                                                    placeholder="Kosongkan jika tidak ingin mengubah">
+                                                <span class="input-group-addon" onclick="togglePassword()"
+                                                    style="cursor: pointer;">
+                                                    <i class="ion-eye-disabled" id="eye-icon"></i>
+                                                </span>
+                                            </div>
+                                            <small class="text-muted">Biarkan kosong jika tidak ingin mengubah
+                                                password</small>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Role</label>
+                                            <select name="role" id="edit_role" class="form-control"
+                                                onchange="toggleEditFields()">
+                                                <option value="Admin">Admin</option>
+                                                <option value="Operator">Operator</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group" id="edit_sekolah_field" style="display:none;">
+                                            <label>NPSN (Sekolahan)</label>
+                                            <select class="form-control select2-sekolahedit" name="daftar_sekolahs_id"
+                                                id="edit_daftar_sekolahs_id">
+                                                <option value="">Pilih Sekolah</option>
+                                                @foreach ($sekolahs as $s)
+                                                    <option value="{{ $s->id }}">{{ $s->vnpsn_sekolah }} -
+                                                        {{ $s->vnama_sekolah }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Batal</button>
+                                            <button type="submit" class="btn btn-primary">Update</button>
+                                        </div>
                                 </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                                    <button type="submit" class="btn btn-primary">Update</button>
-                                </div>
-                            </div>
                         </form>
                     </div>
                 </div>
@@ -300,27 +325,64 @@
                 <script>
                     function toggleForm() {
                         var role = $('#role').val();
-                        $('#maindealerField, #jabatanField, #divisionField').hide();
-
-                        if (role === 'Operator') {
-                            $('#maindealerField').show();
-                        } else if (role === 'Juri') {
-                            $('#jabatanField, #divisionField').show();
-                        }
+                        if (role === 'Operator') $('#sekolahField').show();
+                        else $('#sekolahField').hide();
                     }
 
                     $(document).ready(function() {
-                        $('.select2-maindealer').select2({
-                            placeholder: "Pilih Main Dealer",
+                        $('.select2-sekolah').select2({
+                            placeholder: "Pilih Sekolah",
                             dropdownParent: $('#addUserModal')
                         });
 
                         $('#addUserModal').on('show.bs.modal', function() {
                             toggleForm();
-                            $('.select2-maindealer').val(null).trigger('change');
+                            $('.select2-sekolah').val(null).trigger('change');
                         });
                     });
                 </script>
+
+                <script>
+                    $('#createUserForm').on('submit', function(e) {
+                        e.preventDefault();
+                        let form = $(this);
+                        let url = form.attr('action');
+                        let formData = form.serialize();
+                        let btn = form.find('button[type="submit"]');
+                        let errorDiv = $('#addUserError');
+
+                        btn.prop('disabled', true).text('Menyimpan...');
+                        errorDiv.hide().html('');
+
+                        $.ajax({
+                            url: url,
+                            method: 'POST',
+                            data: formData,
+                            success: function(response) {
+                                if (response.success) {
+                                    $('#addUserModal').modal('hide');
+                                    form[0].reset();
+                                    $('#myTable').DataTable().ajax.reload(null, false);
+                                } else {
+                                    errorDiv.show().html(response.message || 'Terjadi kesalahan.');
+                                }
+                            },
+                            error: function(xhr) {
+                                let msg = 'Terjadi kesalahan.';
+                                if (xhr.status === 422 && xhr.responseJSON.errors) {
+                                    msg = Object.values(xhr.responseJSON.errors).flat().join('<br>');
+                                } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                                    msg = xhr.responseJSON.message;
+                                }
+                                errorDiv.show().html(msg);
+                            },
+                            complete: function() {
+                                btn.prop('disabled', false).text('Simpan');
+                            }
+                        });
+                    });
+                </script>
+
                 <script>
                     $(document).ready(function() {
                         $('#editUserForm').on('submit', function(e) {
@@ -390,15 +452,13 @@
                                 $('#edit_username').val(data.username);
                                 $('#edit_role').val(data.role);
                                 $('#password').val('');
-                                if (data.role === 'AdminMD' || data.role === 'Peserta') {
-                                    $('#edit_maindealer_id').val(data.maindealer_id).trigger('change');
-                                }
-                                if (data.role === 'Juri') {
-                                    $('#edit_jabatan').val(data.jabatan);
-                                    $('#edit_division').val(data.division);
-                                }
+                                $('#edit_daftar_sekolahs_id').val(data.daftar_sekolahs_id);
 
-                                toggleEditFields();
+                                if (data.role === 'Operator') {
+                                    $('#edit_sekolah_field').show();
+                                } else {
+                                    $('#edit_sekolah_field').hide();
+                                }
 
                                 $('#editUserForm').attr('action', '/user/' + userId);
                                 $('#editUserModal').modal('show');
@@ -407,13 +467,9 @@
                     }
 
                     function toggleEditFields() {
-                        const role = $('#edit_role').val();
-                        $('#edit_maindealer_field, #edit_jabatan_field, #edit_division_field').hide();
-                        if (role === 'AdminMD' || role === 'Peserta') {
-                            $('#edit_maindealer_field').show();
-                        } else if (role === 'Juri') {
-                            $('#edit_jabatan_field, #edit_division_field').show();
-                        }
+                        var role = $('#edit_role').val();
+                        if (role === 'Operator') $('#edit_sekolah_field').show();
+                        else $('#edit_sekolah_field').hide();
                     }
                     // Fungsi untuk menampilkan detail user
                     function showUserDetail(userId) {
@@ -421,40 +477,30 @@
                             url: '/user/detail/' + userId,
                             method: 'GET',
                             success: function(data) {
-                                // Isi data ke modal
                                 $('#detail_nama').text(data.nama);
                                 $('#detail_username').text(data.username);
                                 $('#detail_email').text(data.email);
                                 $('#detail_role').text(data.role);
-                                $('#detail_maindealer').text(data.maindealer);
-                                $('#detail_kodemd').text(data.kodemd);
-                                $('#detail_jabatan').text(data.jabatan);
-                                $('#detail_division').text(data.division);
+                                $('#detail_sekolah').text(data.sekolah);
+                                $('#detail_kodemd').text(data.npsn);
                                 $('#detail_status').text(data.status);
                                 $('#detail_created').text(data.created_at);
-
-                                // Tampilkan modal
                                 $('#detailUserModal').modal('show');
                             },
-                            error: function(xhr) {
-                                Swal.fire({
-                                    title: 'Error!',
-                                    text: 'Gagal memuat data user',
-                                    icon: 'error',
-                                    confirmButtonColor: '#01a9ac'
-                                });
+                            error: function() {
+                                Swal.fire('Error!', 'Gagal memuat data user', 'error');
                             }
                         });
                     }
                     $(document).ready(function() {
-                        $('.select2-maindealeredit').select2({
-                            placeholder: "Pilih Main Dealer",
+                        $('.select2-sekolahedit').select2({
+                            placeholder: "Pilih Sekolah",
                             dropdownParent: $('#editUserModal')
                         });
 
                         $('#editUserModal').on('shown.bs.modal', function() {
-                            $('.select2-maindealeredit').select2({
-                                placeholder: "Pilih Main Dealer",
+                            $('.select2-sekolahedit').select2({
+                                placeholder: "Pilih Sekolah",
                                 dropdownParent: $('#editUserModal')
                             });
                         });
